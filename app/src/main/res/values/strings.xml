@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fynex</string>
+    <string name="app_tagline">Gerenciador de Arquivos Avançado Open-Source</string>
+    <string name="donate_title">Apoie o Projeto Fynex</string>
+    <string name="donate_desc">Fynex é 100% gratuito e de código aberto. Sem assinaturas, sem recursos bloqueados, sem anúncios. Se você gosta do nosso trabalho e quer ajudar a manter o desenvolvimento ativo, considere fazer uma doação!</string>
+</resources>
