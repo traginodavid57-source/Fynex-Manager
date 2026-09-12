@@ -21,9 +21,30 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreFile = rootProject.file("key/release.keystore").takeIf { it.exists() }
+                ?: rootProject.file("key/release.jks").takeIf { it.exists() }
+                ?: System.getenv("KEYSTORE_PATH")?.let { file(it) }
+
+            if (keystoreFile != null && keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "fynex123"
+                keyAlias = System.getenv("KEY_ALIAS") ?: "fynex"
+                keyPassword = System.getenv("KEY_PASSWORD") ?: "fynex123"
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            val releaseConfig = signingConfigs.findByName("release")
+            if (releaseConfig?.storeFile != null && releaseConfig.storeFile!!.exists()) {
+                signingConfig = releaseConfig
+            } else {
+                signingConfig = signingConfigs.getByName("debug")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -31,6 +52,13 @@ android {
         }
         debug {
             applicationIdSuffix = ".debug"
+        }
+    }
+
+    applicationVariants.all {
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            outputImpl.outputFileName = "Fynex-v${defaultConfig.versionName}-${buildType.name}.apk"
         }
     }
 

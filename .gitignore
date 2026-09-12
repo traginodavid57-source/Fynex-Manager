@@ -8,3 +8,17 @@
 /captures
 .externalNativeBuild
 .cxx
+
+# APKs and archive packages
+*.apk
+*.apks
+*.xapk
+apks/
+
+# Signing keys & Keystore directory
+key/
+keys/
+*.jks
+*.keystore
+*.p12
+*.pepk
