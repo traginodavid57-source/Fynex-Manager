@@ -56,20 +56,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Prepare Keystore (Optional Secrets)
+      - name: Prepare Keystore from KEY
         run: |
           mkdir -p key
-          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "Decodificando chave de assinatura a partir dos secrets..."
-            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > key/release.keystore
+          if [ -n "${{ secrets.KEY }}" ]; then
+            echo "Decodificando chave a partir do secret KEY..."
+            echo "${{ secrets.KEY }}" | base64 -d > key/release.jks
           else
-            echo "Chave personalizada não fornecida nos secrets. O Gradle usará assinatura de fallback."
+            echo "Secret KEY não configurado. Gradle usará assinatura de fallback."
           fi
 
-      - name: Build Release APK
+      - name: Build Release APK with Gradle
         env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY: ${{ secrets.KEY }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           ./gradlew assembleRelease --stacktrace
@@ -81,7 +82,7 @@ jobs:
           find app/build/outputs/apk/ -name "*.apk" -type f
           APK_PATH=$(find app/build/outputs/apk/release/ -name "*.apk" -type f | head -n 1)
           if [ -z "$APK_PATH" ]; then
-            # Fallback check any generated apk
+            # Fallback search any apk
             APK_PATH=$(find app/build/outputs/apk/ -name "*.apk" -type f | head -n 1)
           fi
           

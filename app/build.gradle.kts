@@ -23,15 +23,34 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystoreFile = rootProject.file("key/release.keystore").takeIf { it.exists() }
-                ?: rootProject.file("key/release.jks").takeIf { it.exists() }
-                ?: System.getenv("KEYSTORE_PATH")?.let { file(it) }
+            val keyBase64 = (findProperty("KEY") as? String) ?: System.getenv("KEY")
+            val keyDir = rootProject.file("key")
+            val keystoreFile = when {
+                !keyBase64.isNullOrBlank() -> {
+                    keyDir.mkdirs()
+                    val decodedFile = File(keyDir, "release.jks")
+                    try {
+                        val decodedBytes = java.util.Base64.getDecoder().decode(keyBase64.trim())
+                        decodedFile.writeBytes(decodedBytes)
+                        decodedFile
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+                rootProject.file("key/release.keystore").exists() -> rootProject.file("key/release.keystore")
+                rootProject.file("key/release.jks").exists() -> rootProject.file("key/release.jks")
+                else -> null
+            }
 
-            if (keystoreFile != null && keystoreFile.exists()) {
+            val storePass = (findProperty("KEYSTORE_PASSWORD") as? String) ?: System.getenv("KEYSTORE_PASSWORD")
+            val alias = (findProperty("KEY_ALIAS") as? String) ?: System.getenv("KEY_ALIAS")
+            val keyPass = (findProperty("KEY_PASSWORD") as? String) ?: System.getenv("KEY_PASSWORD")
+
+            if (keystoreFile != null && keystoreFile.exists() && !storePass.isNullOrBlank() && !alias.isNullOrBlank()) {
                 storeFile = keystoreFile
-                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "fynex123"
-                keyAlias = System.getenv("KEY_ALIAS") ?: "fynex"
-                keyPassword = System.getenv("KEY_PASSWORD") ?: "fynex123"
+                storePassword = storePass
+                keyAlias = alias
+                keyPassword = if (!keyPass.isNullOrBlank()) keyPass else storePass
             }
         }
     }
@@ -40,7 +59,7 @@ android {
         release {
             isMinifyEnabled = false
             val releaseConfig = signingConfigs.findByName("release")
-            if (releaseConfig?.storeFile != null && releaseConfig.storeFile!!.exists()) {
+            if (releaseConfig?.storeFile != null && releaseConfig.storeFile!!.exists() && !releaseConfig.storePassword.isNullOrBlank()) {
                 signingConfig = releaseConfig
             } else {
                 signingConfig = signingConfigs.getByName("debug")
