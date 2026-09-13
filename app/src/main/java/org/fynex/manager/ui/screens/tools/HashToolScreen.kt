@@ -105,7 +105,7 @@ fun HashToolScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(text = File(filePath).name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -135,7 +135,7 @@ fun HashToolScreen(
                             .padding(vertical = 6.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = if (isMatch) Color(0xFF10B981).copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceVariant
+                            containerColor = if (isMatch) Color(0xFF10B981).copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceContainerHigh
                         )
                     ) {
                         Row(

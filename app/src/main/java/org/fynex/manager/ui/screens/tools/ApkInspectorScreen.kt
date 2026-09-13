@@ -119,7 +119,7 @@ fun ApkInspectorScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                     ) {
                         Row(
                             modifier = Modifier.padding(16.dp),
@@ -190,7 +190,7 @@ fun ApkInspectorScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -216,7 +216,7 @@ fun ApkInspectorScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "Estatísticas de Componentes", fontWeight = FontWeight.Bold, fontSize = 15.sp)
@@ -241,7 +241,7 @@ fun ApkInspectorScreen(
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(8.dp),
-                        color = if (isDangerous) Color(0xFFEF4444).copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        color = if (isDangerous) Color(0xFFEF4444).copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f)
                     ) {
                         Text(
                             text = perm,

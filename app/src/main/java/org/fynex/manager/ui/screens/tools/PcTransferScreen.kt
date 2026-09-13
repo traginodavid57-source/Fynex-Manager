@@ -91,7 +91,7 @@ fun PcTransferScreen(
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
-                    .background(if (isRunning) Color(0xFF10B981).copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceVariant),
+                    .background(if (isRunning) Color(0xFF10B981).copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceContainerHigh),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -113,7 +113,7 @@ fun PcTransferScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     Column(
                         modifier = Modifier.padding(20.dp),

@@ -86,7 +86,7 @@ fun AiSettingsScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
@@ -112,7 +112,7 @@ fun AiSettingsScreen(
             Spacer(modifier = Modifier.height(6.dp))
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { showProviderMenu = true }

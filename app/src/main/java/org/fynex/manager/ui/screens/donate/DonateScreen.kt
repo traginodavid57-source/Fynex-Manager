@@ -109,7 +109,7 @@ fun DonateScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                 )
             ) {
                 Column(
@@ -166,7 +166,7 @@ fun DonateScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -232,7 +232,7 @@ fun DonateScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text("Financiamento Coletivo Internacional", fontWeight = FontWeight.Bold, fontSize = 15.sp)
@@ -266,7 +266,7 @@ fun DonateScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text("Criptomoedas (Privacidade & Global)", fontWeight = FontWeight.Bold, fontSize = 15.sp)

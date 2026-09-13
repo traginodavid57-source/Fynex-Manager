@@ -3,6 +3,7 @@ package org.fynex.manager.ui.navigation
 sealed class Screen(val route: String, val title: String) {
     object Home : Screen("home", "Início")
     object Explorer : Screen("explorer", "Arquivos")
+    object Search : Screen("search", "Busca")
     object Tools : Screen("tools", "Ferramentas")
     object Plugins : Screen("plugins", "Plugins")
     object Vault : Screen("vault", "Cofre Seguro")
@@ -31,5 +32,8 @@ sealed class Screen(val route: String, val title: String) {
     }
     object HashTool : Screen("hash_tool?path={path}", "Checksum & Hashes") {
         fun createRoute(path: String) = "hash_tool?path=${android.net.Uri.encode(path)}"
+    }
+    object SearchResults : Screen("search_results?query={query}", "Resultados da Busca") {
+        fun createRoute(query: String) = "search_results?query=${android.net.Uri.encode(query)}"
     }
 }

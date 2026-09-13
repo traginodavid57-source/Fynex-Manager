@@ -167,7 +167,7 @@ fun AiChatScreen(
                     horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start
                 ) {
                     Surface(
-                        color = if (isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                        color = if (isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
                         shape = RoundedCornerShape(
                             topStart = 16.dp,
                             topEnd = 16.dp,
@@ -215,7 +215,7 @@ fun AiChatScreen(
             for (chip in chips) {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     modifier = Modifier.clickable {
                         inputText = chip
                     }

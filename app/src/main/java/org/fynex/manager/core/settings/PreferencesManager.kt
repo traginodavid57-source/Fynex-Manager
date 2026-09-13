@@ -78,8 +78,8 @@ class PreferencesManager(context: Context) {
     }
 
     private fun loadThemeMode(): AppThemeMode {
-        val name = prefs.getString(KEY_THEME, AppThemeMode.DARK.name) ?: AppThemeMode.DARK.name
-        return try { AppThemeMode.valueOf(name) } catch (_: Exception) { AppThemeMode.DARK }
+        val name = prefs.getString(KEY_THEME, AppThemeMode.SYSTEM.name) ?: AppThemeMode.SYSTEM.name
+        return try { AppThemeMode.valueOf(name) } catch (_: Exception) { AppThemeMode.SYSTEM }
     }
 
     private fun loadViewMode(): ViewMode {

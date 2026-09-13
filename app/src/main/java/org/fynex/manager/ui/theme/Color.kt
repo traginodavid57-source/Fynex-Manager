@@ -2,29 +2,40 @@ package org.fynex.manager.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val BluePrimary = Color(0xFF3B82F6)
-val BlueDark = Color(0xFF1D4ED8)
-val BlueLight = Color(0xFF60A5FA)
+// Fylo-inspired fallback palette (when dynamic color is unavailable)
+// Light theme: warm off-white background (#FFFCFDF7)
+val FyloLightBg = Color(0xFFFCFDF7)
+val FyloLightSurface = Color(0xFFFFFFFF)
+val FyloLightCard = Color(0xFFF5F3EE)
+val FyloLightPrimary = Color(0xFF3D6B4F)
+val FyloLightOnPrimary = Color(0xFFFFFFFF)
+val FyloLightOnBg = Color(0xFF1A1C18)
+val FyloLightOnSurface = Color(0xFF1A1C18)
 
-val EmeraldAccent = Color(0xFF10B981)
-val EmeraldDark = Color(0xFF059669)
+// Dark theme: near-black background (#FF111318)
+val FyloDarkBg = Color(0xFF111318)
+val FyloDarkSurface = Color(0xFF1A1D24)
+val FyloDarkCard = Color(0xFF22252C)
+val FyloDarkPrimary = Color(0xFF7DCDA0)
+val FyloDarkOnPrimary = Color(0xFF00391E)
+val FyloDarkOnBg = Color(0xFFE2E3DD)
+val FyloDarkOnSurface = Color(0xFFE2E3DD)
 
-val DarkBackground = Color(0xFF0B132B)
-val DarkSurface = Color(0xFF1C2541)
-val DarkCard = Color(0xFF263353)
+// Monochrome accent (gray-scale dynamic)
+val MonoSurface = Color(0xFF1B1B1B)
+val MonoCard = Color(0xFF272727)
+val MonoPrimary = Color(0xFFC8C8C8)
 
-val AmoledBackground = Color(0xFF000000)
-val AmoledSurface = Color(0xFF121212)
-val AmoledCard = Color(0xFF1E1E1E)
+// AMOLED
+val AmoledBg = Color(0xFF000000)
+val AmoledSurface = Color(0xFF0D0D0D)
+val AmoledCard = Color(0xFF171717)
 
-val LightBackground = Color(0xFFF8FAFC)
-val LightSurface = Color(0xFFFFFFFF)
-val LightCard = Color(0xFFF1F5F9)
-
-val TextWhite = Color(0xFFF8FAFC)
-val TextGray = Color(0xFF94A3B8)
-val TextDark = Color(0xFF0F172A)
-
-val WarningYellow = Color(0xFFF59E0B)
-val DangerRed = Color(0xFFEF4444)
-val PurpleAi = Color(0xFF8B5CF6)
+// Shared accent/semantic colors
+val AccentGreen = Color(0xFF10B981)
+val AccentBlue = Color(0xFF3B82F6)
+val AccentPurple = Color(0xFF8B5CF6)
+val AccentAmber = Color(0xFFF59E0B)
+val AccentRed = Color(0xFFEF4444)
+val AccentCyan = Color(0xFF06B6D4)
+val AccentPink = Color(0xFFEC4899)

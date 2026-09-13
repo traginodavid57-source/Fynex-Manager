@@ -104,7 +104,7 @@ fun HexEditorScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text("Offset", fontFamily = FontFamily.Monospace, fontSize = 11.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(72.dp))

@@ -100,7 +100,7 @@ fun SettingsScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("Aparência & Interface", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.primary)
@@ -186,7 +186,7 @@ fun SettingsScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("Acesso de Sistema & Root", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.primary)
@@ -219,7 +219,7 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .clickable { onNavigateToDonate() },
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -238,7 +238,7 @@ fun SettingsScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("Sobre o Fynex", fontWeight = FontWeight.Bold, fontSize = 15.sp)

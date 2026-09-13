@@ -50,7 +50,7 @@ fun BreadcrumbBar(
 
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(

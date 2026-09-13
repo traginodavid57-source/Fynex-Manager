@@ -120,7 +120,7 @@ fun DiffViewerScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             Text(
@@ -172,7 +172,7 @@ fun DiffViewerScreen(
                         )
                     }
 
-                    Box(modifier = Modifier.width(1.dp).background(MaterialTheme.colorScheme.surfaceVariant))
+                    Box(modifier = Modifier.width(1.dp).background(MaterialTheme.colorScheme.surfaceContainerHigh))
 
                     // Side B
                     Row(modifier = Modifier.weight(1f).padding(start = 4.dp)) {

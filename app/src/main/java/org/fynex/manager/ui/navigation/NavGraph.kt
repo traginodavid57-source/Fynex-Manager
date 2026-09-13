@@ -3,10 +3,9 @@ package org.fynex.manager.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Extension
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -16,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -29,11 +27,13 @@ import org.fynex.manager.ui.screens.ai.AiSettingsScreen
 import org.fynex.manager.ui.screens.donate.DonateScreen
 import org.fynex.manager.ui.screens.editor.CodeEditorScreen
 import org.fynex.manager.ui.screens.editor.HexEditorScreen
+import org.fynex.manager.ui.screens.explorer.ActivePane
 import org.fynex.manager.ui.screens.explorer.ExplorerScreen
 import org.fynex.manager.ui.screens.explorer.ExplorerViewModel
 import org.fynex.manager.ui.screens.home.HomeScreen
 import org.fynex.manager.ui.screens.plugins.PluginMarketScreen
 import org.fynex.manager.ui.screens.settings.SettingsScreen
+import org.fynex.manager.ui.screens.search.SearchScreen
 import org.fynex.manager.ui.screens.tools.ApkInspectorScreen
 import org.fynex.manager.ui.screens.tools.ApkSignerScreen
 import org.fynex.manager.ui.screens.tools.BatchRenameScreen
@@ -54,9 +54,8 @@ fun MainNavGraph(
     val bottomNavItems = listOf(
         Pair(Screen.Home, Icons.Default.Home),
         Pair(Screen.Explorer, Icons.Default.Folder),
-        Pair(Screen.Tools, Icons.Default.Build),
-        Pair(Screen.Plugins, Icons.Default.Extension),
-        Pair(Screen.Donate, Icons.Default.Favorite)
+        Pair(Screen.Search, Icons.Default.Search),
+        Pair(Screen.Tools, Icons.Default.Build)
     )
 
     val showBottomBar = bottomNavItems.any { it.first.route == currentRoute }
@@ -70,13 +69,12 @@ fun MainNavGraph(
                 ) {
                     bottomNavItems.forEach { (screen, icon) ->
                         val selected = currentRoute == screen.route
-                        val isDonate = screen == Screen.Donate
                         NavigationBarItem(
                             icon = {
                                 Icon(
                                     imageVector = icon,
                                     contentDescription = screen.title,
-                                    tint = if (isDonate) Color(0xFFEF4444) else if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
                             },
                             label = { Text(screen.title) },
@@ -110,7 +108,9 @@ fun MainNavGraph(
                     onNavigateToPcTransfer = { navController.navigate(Screen.PcTransfer.route) },
                     onNavigateToVault = { navController.navigate(Screen.Vault.route) },
                     onNavigateToAiChat = { navController.navigate(Screen.AiChat.createRoute()) },
-                    onNavigateToDonate = { navController.navigate(Screen.Donate.route) }
+                    onNavigateToDonate = { navController.navigate(Screen.Donate.route) },
+                    onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
+                    onNavigateToSearch = { navController.navigate(Screen.Search.route) }
                 )
             }
 
@@ -143,6 +143,22 @@ fun MainNavGraph(
                     onNavigateToAiChat = { navController.navigate(Screen.AiChat.createRoute()) },
                     onNavigateToPlugins = { navController.navigate(Screen.Plugins.route) },
                     onNavigateToVault = { navController.navigate(Screen.Vault.route) }
+                )
+            }
+
+            composable(Screen.Search.route) {
+                SearchScreen(
+                    onOpenResult = { path ->
+                        val parent = path.substringBeforeLast('/')
+                        explorerViewModel.loadDirectory(ActivePane.LEFT, parent)
+                        explorerViewModel.setActivePane(ActivePane.LEFT)
+                        navController.navigate(Screen.Explorer.route)
+                    },
+                    onOpenFolder = { path ->
+                        explorerViewModel.loadDirectory(ActivePane.LEFT, path)
+                        explorerViewModel.setActivePane(ActivePane.LEFT)
+                        navController.navigate(Screen.Explorer.route)
+                    }
                 )
             }
 

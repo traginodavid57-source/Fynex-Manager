@@ -119,7 +119,7 @@ fun ExplorerScreen(
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Surface(
@@ -281,7 +281,7 @@ fun ExplorerScreen(
                     modifier = Modifier
                         .width(2.dp)
                         .fillMaxHeight()
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 )
                 Box(modifier = Modifier.weight(1f)) {
                     PaneContent(

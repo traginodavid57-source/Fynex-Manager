@@ -179,7 +179,7 @@ fun CodeEditorScreen(
         // Search & Replace Banner
         if (showSearchRow) {
             Surface(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -232,7 +232,7 @@ fun CodeEditorScreen(
                 // Line Numbers Gutter
                 Column(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f))
                         .padding(horizontal = 8.dp, vertical = 6.dp),
                     horizontalAlignment = Alignment.End
                 ) {

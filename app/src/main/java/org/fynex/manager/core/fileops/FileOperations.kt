@@ -11,6 +11,38 @@ import java.util.zip.CRC32
 
 object FileOperations {
 
+    suspend fun search(
+        root: File,
+        query: String,
+        maxResults: Int = 200,
+        isCancelled: () -> Boolean = { false }
+    ): List<FileItem> = withContext(Dispatchers.IO) {
+        val q = query.trim().lowercase()
+        if (q.isEmpty()) return@withContext emptyList()
+        val results = mutableListOf<FileItem>()
+        val stack = ArrayDeque<File>()
+        stack.add(root)
+        while (stack.isNotEmpty() && results.size < maxResults && !isCancelled()) {
+            val dir = stack.removeLast()
+            if (!dir.canRead()) continue
+            val children = dir.listFiles() ?: continue
+            val dirs = mutableListOf<File>()
+            for (f in children) {
+                if (isCancelled() || results.size >= maxResults) break
+                val name = f.name.lowercase()
+                if (name.contains(q)) {
+                    results.add(FileItem(file = f))
+                }
+                if (f.isDirectory) {
+                    if (f.canRead()) dirs.add(f)
+                }
+            }
+            // Add subdirectories to stack (reverse order for DFS-like behavior)
+            stack.addAll(dirs)
+        }
+        results.sortedByDescending { it.lastModified }
+    }
+
     suspend fun listDirectory(path: String, showHidden: Boolean = false): List<FileItem> = withContext(Dispatchers.IO) {
         val dir = File(path)
         if (!dir.exists() || !dir.isDirectory) {
