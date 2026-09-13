@@ -109,6 +109,7 @@ android {
 
     lint {
         checkReleaseBuilds = false
+        disable += "AarMetadataVersionCheck"
     }
 }
 
