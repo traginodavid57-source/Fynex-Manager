@@ -147,7 +147,7 @@ object FileOperations {
             val nameWithoutExt = file.nameWithoutExtension
             val ext = if (file.extension.isNotEmpty()) ".${file.extension}" else ""
 
-            val replaced = if (pattern.isNotEmpty()) {
+            var base = if (pattern.isNotEmpty()) {
                 if (useRegex) {
                     nameWithoutExt.replace(Regex(pattern), replacement)
                 } else {
@@ -157,13 +157,15 @@ object FileOperations {
                 nameWithoutExt
             }
 
-            val indexStr = if (pattern.contains("{i}") || replacement.contains("{i}")) {
-                ""
+            val indexStr = String.format("%0${indexDigits}d", currentIndex)
+            val usesIndex = base.contains("{i}") || base.contains("{index}")
+            val withNumber = if (usesIndex) {
+                base.replace("{i}", indexStr).replace("{index}", indexStr)
             } else {
-                String.format("%0${indexDigits}d", currentIndex)
+                "$base$indexStr"
             }
 
-            val newName = "$prefix$replaced$indexStr$suffix$ext"
+            val newName = "$prefix$withNumber$suffix$ext"
             val target = File(file.parentFile, newName)
             if (file.renameTo(target)) {
                 successCount++

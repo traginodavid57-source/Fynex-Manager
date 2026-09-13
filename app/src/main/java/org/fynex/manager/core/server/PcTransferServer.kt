@@ -17,6 +17,8 @@ import java.net.URLDecoder
 
 class PcTransferServer(val port: Int = 8080) {
 
+    private val token: String = prepareToken()
+
     private var serverSocket: ServerSocket? = null
     var isRunning = false
         private set
@@ -78,7 +80,31 @@ class PcTransferServer(val port: Int = 8080) {
         }
     }
 
-    private fun handleGet(path: String, output: OutputStream) {
+    private fun isAuthorized(query: String): Boolean {
+        if (query.isBlank()) return false
+        val param = query.split("&").firstOrNull { it.startsWith("t=") } ?: return false
+        return param.substring(2) == token
+    }
+
+    private fun withToken(relativePath: String): String {
+        val sep = if (relativePath.contains("?")) "&" else "?"
+        return "$relativePath$sep" + "t=$token"
+    }
+
+    private fun handleGet(rawPath: String, output: OutputStream) {
+        val querySplit = rawPath.split("?", limit = 2)
+        val path = querySplit[0]
+        val query = querySplit.getOrElse(1) { "" }
+
+        if (!isAuthorized(query)) {
+            val body = "403 Forbidden - Token inválido. Use a URL completa exibida no app."
+            val header = "HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n"
+            output.write(header.toByteArray(Charsets.UTF_8))
+            output.write(body.toByteArray(Charsets.UTF_8))
+            output.flush()
+            return
+        }
+
         val rootDir = Environment.getExternalStorageDirectory()
         val targetFile = if (path == "/" || path.isBlank()) {
             rootDir
@@ -118,15 +144,15 @@ class PcTransferServer(val port: Int = 8080) {
 
         val rows = StringBuilder()
         if (parentPath.isNotEmpty()) {
-            rows.append("""<tr><td>📁</td><td><a href="$parentPath">.. (Voltar)</a></td><td>-</td><td>-</td></tr>""")
+            rows.append("""<tr><td>📁</td><td><a href="${withToken(parentPath)}">.. (Voltar)</a></td><td>-</td><td>-</td></tr>""")
         }
 
         for (f in files) {
             val icon = if (f.isDirectory) "📁" else "📄"
             val subPath = if (currentUrlPath.endsWith("/")) "$currentUrlPath${f.name}" else "$currentUrlPath/${f.name}"
             val size = if (f.isDirectory) "Pasta" else "${f.length() / 1024} KB"
-            val link = if (f.isDirectory) subPath else subPath
-            val downloadBtn = if (!f.isDirectory) """<a href="$subPath" class="dl-btn">Baixar</a>""" else ""
+            val link = withToken(subPath)
+            val downloadBtn = if (f.isDirectory) "" else """<a href="$link" class="dl-btn">Baixar</a>"""
             rows.append("""
                 <tr>
                     <td>$icon</td>
@@ -187,6 +213,19 @@ class PcTransferServer(val port: Int = 8080) {
     }
 
     companion object {
+        @Volatile
+        var activeToken: String? = null
+            private set
+
+        private fun generateToken(): String = (100_000..999_999).random().toString()
+
+        fun prepareToken(): String {
+            if (activeToken == null) {
+                activeToken = generateToken()
+            }
+            return activeToken!!
+        }
+
         fun getLocalIpAddress(): String? {
             try {
                 val interfaces = NetworkInterface.getNetworkInterfaces()

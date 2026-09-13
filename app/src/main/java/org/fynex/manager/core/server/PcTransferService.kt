@@ -37,7 +37,8 @@ class PcTransferService : Service() {
         if (server == null) {
             server = PcTransferServer(port).apply { start() }
             val ip = PcTransferServer.getLocalIpAddress() ?: "127.0.0.1"
-            val notification = buildNotification("Servidor Fynex Ativo em http://$ip:$port")
+            val token = PcTransferServer.prepareToken()
+            val notification = buildNotification("Servidor Fynex Ativo em http://$ip:$port/?t=$token")
             startForeground(NOTIFICATION_ID, notification)
         }
     }

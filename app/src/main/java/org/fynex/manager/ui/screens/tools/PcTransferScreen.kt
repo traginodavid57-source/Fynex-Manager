@@ -55,6 +55,7 @@ fun PcTransferScreen(
 ) {
     val context = LocalContext.current
     var isRunning by remember { mutableStateOf(false) }
+    var accessToken by remember { mutableStateOf(PcTransferServer.activeToken ?: "") }
     var localIp by remember { mutableStateOf(PcTransferServer.getLocalIpAddress() ?: "127.0.0.1") }
     val port = 8080
 
@@ -124,25 +125,26 @@ fun PcTransferScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                        ) {
+Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                            ) {
+                                Text(
+                                    text = "http://$localIp:$port/?t=$accessToken",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.Monospace,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
                             Text(
-                                text = "http://$localIp:$port",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = FontFamily.Monospace,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                text = "Use essa URL com o token de acesso. Ela é única desta sessão e só funciona na sua rede local.",
+                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = "Certifique-se de que o computador e o celular estejam conectados à mesma rede Wi-Fi.",
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                        )
                     }
                 }
             } else {
@@ -164,6 +166,7 @@ fun PcTransferScreen(
                         isRunning = false
                     } else {
                         localIp = PcTransferServer.getLocalIpAddress() ?: "127.0.0.1"
+                        accessToken = PcTransferServer.prepareToken()
                         val startIntent = Intent(context, PcTransferService::class.java).apply {
                             putExtra(PcTransferService.EXTRA_PORT, port)
                         }

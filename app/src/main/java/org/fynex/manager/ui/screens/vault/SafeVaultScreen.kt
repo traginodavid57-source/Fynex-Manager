@@ -1,6 +1,8 @@
 package org.fynex.manager.ui.screens.vault
 
 import android.widget.Toast
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Restore
@@ -30,6 +33,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -49,6 +53,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import kotlinx.coroutines.launch
 import org.fynex.manager.core.model.FileItem
 import org.fynex.manager.core.vault.SafeVaultManager
@@ -61,6 +67,8 @@ fun SafeVaultScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val fragmentActivity = context as? FragmentActivity
+    val biometricsAvailable = fragmentActivity != null && SafeVaultManager.canAuthenticate(context)
     var isUnlocked by remember { mutableStateOf(false) }
     var passcode by remember { mutableStateOf("") }
     var vaultFiles by remember { mutableStateOf<List<FileItem>>(emptyList()) }
@@ -168,6 +176,59 @@ fun SafeVaultScreen(
                     Icon(imageVector = Icons.Default.LockOpen, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Desbloquear Cofre")
+                }
+
+                if (biometricsAvailable) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    OutlinedButton(
+                        onClick = {
+                            try {
+                                val cipher = SafeVaultManager.createBiometricDecryptCipher()
+                                val executor = ContextCompat.getMainExecutor(context)
+                                val prompt = BiometricPrompt(
+                                    fragmentActivity!!,
+                                    executor,
+                                    object : BiometricPrompt.AuthenticationCallback() {
+                                        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                                            val stored = SafeVaultManager.retrievePasscodeFromCipher(context, result.cryptoObject?.cipher)
+                                            if (!stored.isNullOrEmpty()) {
+                                                passcode = stored
+                                                isUnlocked = true
+                                            } else {
+                                                Toast.makeText(context, "Nenhuma senha salva. Mova um arquivo para o cofre antes.", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+
+                                        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                                            if (errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+                                                Toast.makeText(context, errString, Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+                                )
+                                val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                                    .setTitle("Desbloquear Cofre")
+                                    .setSubtitle("Confirme sua identidade para liberar a senha do cofre")
+                                    .setNegativeButtonText("Usar senha")
+                                    .setAllowedAuthenticators(
+                                        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                                            BiometricManager.Authenticators.BIOMETRIC_WEAK
+                                    )
+                                    .build()
+                                prompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "Biometria indisponível: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Fingerprint, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Desbloquear com Biometria")
+                    }
                 }
             }
         } else {

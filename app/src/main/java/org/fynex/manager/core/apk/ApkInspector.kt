@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.RandomAccessFile
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.security.MessageDigest
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -38,6 +41,8 @@ data class ApkDetails(
 )
 
 object ApkInspector {
+
+    private const val APK_SIGNING_BLOCK_MAGIC = "APK Sig Block 42"
 
     suspend fun inspect(context: Context, apkFile: File): ApkDetails = withContext(Dispatchers.IO) {
         var appName = apkFile.nameWithoutExtension
@@ -132,6 +137,33 @@ object ApkInspector {
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Detect APK Signing Block (v2/v3) located right before the Central Directory.
+        // Its last 24 bytes are: 8-byte block size (LE) + 16-byte magic "APK Sig Block 42".
+        try {
+            RandomAccessFile(apkFile, "r").use { raf ->
+                val len = raf.length()
+                if (len >= 22) {
+                    raf.seek(len - 22)
+                    val eocd = ByteArray(22)
+                    raf.readFully(eocd)
+                    val isEocd = (eocd[0].toInt() and 0xFF == 0x50) && (eocd[1].toInt() and 0xFF == 0x4B)
+                    if (isEocd) {
+                        val centralDirOffset = ByteBuffer.wrap(eocd, 16, 4)
+                            .order(ByteOrder.LITTLE_ENDIAN).int.toLong() and 0xFFFFFFFFL
+                        if (centralDirOffset >= 24) {
+                            raf.seek(centralDirOffset - 24)
+                            val tail = ByteArray(24)
+                            raf.readFully(tail)
+                            val magic = String(tail, 8, 16, Charsets.UTF_8)
+                            hasV2 = magic == APK_SIGNING_BLOCK_MAGIC
                         }
                     }
                 }
