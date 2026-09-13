@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "org.fynex.manager"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "org.fynex.manager"
