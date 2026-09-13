@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -30,7 +32,7 @@ android {
                     keyDir.mkdirs()
                     val decodedFile = File(keyDir, "release.jks")
                     try {
-                        val decodedBytes = java.util.Base64.getDecoder().decode(keyBase64.trim())
+                        val decodedBytes = Base64.getDecoder().decode(keyBase64.trim())
                         decodedFile.writeBytes(decodedBytes)
                         decodedFile
                     } catch (_: Exception) {
@@ -86,8 +88,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
     }
 
     buildFeatures {
