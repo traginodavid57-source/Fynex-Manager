@@ -154,11 +154,10 @@ object SafeVaultManager {
         destinationDir: File,
         passcode: String
     ): Result<File> = withContext(Dispatchers.IO) {
+        if (!destinationDir.exists()) destinationDir.mkdirs()
+        val originalName = vaultFile.name.removeSuffix(".fynexenc")
+        val targetFile = File(destinationDir, originalName)
         try {
-            if (!destinationDir.exists()) destinationDir.mkdirs()
-            val originalName = vaultFile.name.removeSuffix(".fynexenc")
-            val targetFile = File(destinationDir, originalName)
-
             val stream = openVaultStream(vaultFile, passcode)
             try {
                 val cipher = Cipher.getInstance(ALGO)
@@ -269,7 +268,7 @@ object SafeVaultManager {
             .setKeySize(2048)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            builder.setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC)
+            builder.setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG)
         } else {
             @Suppress("DEPRECATION")
             builder.setUserAuthenticationRequired(true)
