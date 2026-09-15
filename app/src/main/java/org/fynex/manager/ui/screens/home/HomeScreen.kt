@@ -316,7 +316,7 @@ fun HomeScreen(
             val categories = listOf(
                 CategoryCardData("Imagens", Icons.Default.Image, MaterialTheme.colorScheme.primary, FileCategory.IMAGES),
                 CategoryCardData("Vídeos", Icons.Default.Movie, MaterialTheme.colorScheme.tertiary, FileCategory.VIDEOS),
-                CategoryCardData("Áudios", Icons.Default.MusicNote, MaterialTheme.colorScheme.error, FileCategory.AUDIO),
+                CategoryCardData("Áudio", Icons.Default.MusicNote, MaterialTheme.colorScheme.error, FileCategory.AUDIO),
                 CategoryCardData("Documentos", Icons.Default.Description, MaterialTheme.colorScheme.secondary, FileCategory.DOCUMENTS),
                 CategoryCardData("APKs & Apps", Icons.Default.Android, MaterialTheme.colorScheme.primary, FileCategory.APKS),
                 CategoryCardData("Compactados", Icons.Default.Archive, MaterialTheme.colorScheme.tertiary, FileCategory.ARCHIVES),
